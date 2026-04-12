@@ -4,17 +4,24 @@
     <meta charset="utf-8">
     <title>Hearken</title>
     <script>
-      // GitHub Pages SPA redirect fix
-      // pathSegmentsToKeep = 1 preserves /hearken-app/ in the URL
-      var pathSegmentsToKeep = 1;
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // Single Page App redirect fix for GitHub Pages
+      // Converts path to query string so index.html can restore it
+      // pathSegmentsToKeep = 1 keeps /hearken-app/ in the URL
+      (function() {
+        var l = window.location;
+        var pathSegmentsToKeep = 1;
+        var pathSegments = l.pathname.split('/');
+        var keepSegments = pathSegments.slice(0, 1 + pathSegmentsToKeep).join('/');
+        var restSegments = pathSegments.slice(1 + pathSegmentsToKeep).join('/');
+        var search = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+        var hash = l.hash;
+        var redirectPath = l.protocol + '//' + l.hostname +
+          (l.port ? ':' + l.port : '') +
+          keepSegments + '/?/' +
+          restSegments.replace(/&/g, '~and~') +
+          search + hash;
+        l.replace(redirectPath);
+      })();
     </script>
   </head>
   <body></body>
