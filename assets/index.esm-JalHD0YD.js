@@ -1,1 +1,0 @@
-import{G as e,d as t}from"./index.esm-BqPljhU3.js";export{t as deleteDoc,e as doc};
